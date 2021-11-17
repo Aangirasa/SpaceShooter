@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BulletPool {
-    int MAX = 70;
     private final List<Bullets> pool = new ArrayList<>();
+    int MAX = 70;
 
     public BulletPool() {
         for (int i = 0; i < MAX; i++) {
