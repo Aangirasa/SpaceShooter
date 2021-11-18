@@ -3,14 +3,13 @@ package com.swave.spaceshooter.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends GameObject {
     private static final Texture shipLeft = new Texture("ship0.png");
     private static final Texture shipRight = new Texture("ship4.png");
-    private final BulletManager bulletManager = new BulletManager();
+    private final BulletManager bulletManager = new BulletManager(new Vector2(0,1),70);
     public int health = 100;
     public int MOVEMENT_SPEED = 120;
     public float fireRate = 0.1f;

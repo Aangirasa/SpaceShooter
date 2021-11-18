@@ -9,6 +9,7 @@ public class Bullets {
     private static final int SPEED = 300;
     public boolean isActive = true;
     public Vector2 transform;
+    public Vector2 direction;
     private static Texture texture;
 
     public Bullets(Vector2 transform) {
@@ -16,11 +17,15 @@ public class Bullets {
     }
 
     public void update(Batch batch) {
-        if (isActive && transform.y < 1000) {
-            transform.y += SPEED * Gdx.graphics.getDeltaTime();
-            batch.draw(texture, transform.x, transform.y);
-        } else {
+        if(isActive && direction.y==-1 && transform.y <0){
             isActive = false;
+        }
+        if(isActive && direction.y==1 && transform.y> 1000){
+            isActive = false;
+        }
+        if (isActive) {
+            transform.y += SPEED * Gdx.graphics.getDeltaTime() *direction.y;
+            batch.draw(texture, transform.x, transform.y);
         }
     }
 
