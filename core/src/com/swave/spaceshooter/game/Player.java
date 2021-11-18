@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends GameObject {
-    private final BulletPool bulletPool = new BulletPool();
+    private final BulletManager bulletManager = new BulletManager();
     public int health = 100;
     public int MOVEMENT_SPEED = 120;
     public float fireRate = 0.1f;
@@ -19,22 +19,26 @@ public class Player extends GameObject {
 
     @Override
     public void update(Batch batch) {
-        Vector2 inputs = handleInput();
+        Vector2 inputs = handleMovementInputs();
         transform.x -= (inputs.x * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
         transform.y -= (inputs.y * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            coolDown -= Gdx.graphics.getDeltaTime();
-            if (coolDown < 0) {
-                bulletPool.addResources(new Vector2(transform.x - 5, transform.y + 10));
-                bulletPool.addResources(new Vector2(transform.x + 13, transform.y + 10));
-                coolDown = fireRate;
-            }
-        }
-        bulletPool.update(batch);
+        handleBulletFires();
+        bulletManager.update(batch);
         batch.draw(texture, transform.x, transform.y);
     }
 
-    private Vector2 handleInput() {
+    private void handleBulletFires() {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            coolDown -= Gdx.graphics.getDeltaTime();
+            if (coolDown < 0) {
+                bulletManager.addResources(new Vector2(transform.x - 5, transform.y + 10));
+                bulletManager.addResources(new Vector2(transform.x + 13, transform.y + 10));
+                coolDown = fireRate;
+            }
+        }
+    }
+
+    private Vector2 handleMovementInputs() {
         int x = 0;
         int y = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {

@@ -7,13 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BulletPool {
+public class BulletManager {
     private final List<Bullets> pool = new ArrayList<>();
     int MAX = 70;
 
-    public BulletPool() {
+    public BulletManager() {
+        Bullets.updateTexture(new Texture("shotoval.png"));
         for (int i = 0; i < MAX; i++) {
-            pool.add(new Bullets(new Vector2(0f, 1505f), new Texture("shotoval.png")));
+            pool.add(new Bullets(new Vector2(0f, 1505f)));
         }
     }
 
