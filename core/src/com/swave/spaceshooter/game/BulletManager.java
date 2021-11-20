@@ -11,11 +11,11 @@ public class BulletManager {
     private final List<Bullets> pool = new ArrayList<>();
     public Vector2 direction;
 
-    public BulletManager(Vector2 direction, int MAX) {
+    public BulletManager(Vector2 direction, int MAX,int strength) {
         this.direction = direction;
         Bullets.updateTexture(new Texture("shotoval.png"));
         for (int i = 0; i < MAX; i++) {
-            Bullets b = new Bullets(new Vector2(0f, 1505f));
+            Bullets b = new Bullets(new Vector2(0f, 1505f),strength);
             b.direction = direction;
             pool.add(b);
         }

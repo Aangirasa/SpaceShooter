@@ -15,9 +15,9 @@ public class PlayerManager extends GameObject {
     public static int health = 100;
     public static Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 25f);
     private static PlayerManager INSTANCE = null;
-    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70);
+    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70 ,5);
     public int MOVEMENT_SPEED = 120;
-    public float fireRate = 0.1f;
+    public float fireRate = 0.25f;
     public float coolDown = fireRate;
 
     private PlayerManager() {
@@ -78,8 +78,9 @@ public class PlayerManager extends GameObject {
 
     public void detectCollision(List<Bullets> bulletsList) {
         bulletsList.forEach(bullets -> {
-            if (boundingBox.overlaps(bullets.boundingBox)) {
+            if (bullets.isActive && boundingBox.overlaps(bullets.boundingBox)) {
                 health--;
+                bullets.isActive = false;
             }
         });
     }

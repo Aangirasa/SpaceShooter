@@ -21,6 +21,7 @@ public class Background extends GameObject {
 
     @Override
     public void update(Batch batch) {
+        //simulating Infinte Scroll with 2 Backgrounds
         if (transform.y <= -1500) {
             transform.y = yBg2 * -1;
             yBg2 = 0;

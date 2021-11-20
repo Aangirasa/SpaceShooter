@@ -3,6 +3,9 @@ package com.swave.spaceshooter;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.swave.spaceshooter.events.EventManager;
+import com.swave.spaceshooter.events.EventManagerImpl;
+import com.swave.spaceshooter.events.ScoreListener;
 import com.swave.spaceshooter.game.Background;
 import com.swave.spaceshooter.game.EnemyManager;
 import com.swave.spaceshooter.game.GameObject;
@@ -14,6 +17,7 @@ public class SpaceShooter extends ApplicationAdapter {
     private SpriteBatch batch;
     private GameObject background;
     private GameObject playerManager;
+    private EventManager eventManager;
 
     @Override
     public void create() {
@@ -21,6 +25,9 @@ public class SpaceShooter extends ApplicationAdapter {
         background = new Background();
         enemyManager = EnemyManager.getInstance();
         playerManager = PlayerManager.getInstance();
+        eventManager = EventManagerImpl.getInstance();
+        ScoreListener scoreListener = new ScoreListener();
+        eventManager.subscribe("addPoints",scoreListener);
     }
 
 

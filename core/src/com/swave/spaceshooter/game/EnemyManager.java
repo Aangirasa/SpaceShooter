@@ -2,6 +2,8 @@ package com.swave.spaceshooter.game;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.swave.spaceshooter.events.EventManager;
+import com.swave.spaceshooter.events.EventManagerImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +13,12 @@ public class EnemyManager {
     private static EnemyManager INSTANCE = null;
     private final List<Enemy> enemies;
     public BulletManager bulletManager;
+    private final EventManager eventManager = EventManagerImpl.getInstance();
 
     private EnemyManager() {
         this.enemies = new ArrayList<>();
-        this.bulletManager = new BulletManager(new Vector2(0, -1), 120);
-        bulletManager.direction = new Vector2(0, -1);
+        this.bulletManager = new BulletManager(new Vector2(0, -1), 120,1);
+        //bulletManager.direction = new Vector2(0, -1);
         spawnEnemies();
     }
 
@@ -45,8 +48,15 @@ public class EnemyManager {
     public void detectCollisions(List<Bullets> playerBullets) {
         for (Bullets bullet : playerBullets) {
             for (Enemy enemy : enemies) {
-                if (enemy.isCollision(bullet.boundingBox)) {
-                    enemy.health--;
+                if (enemy.isActive) {
+                    if (bullet.isActive && enemy.isCollision(bullet.boundingBox)) {
+                        enemy.health -= 10;
+                        bullet.isActive = false;
+                    }
+                    if (enemy.health < 0) {
+                        enemy.isActive = false;
+                        eventManager.notify("addPoints",enemy.enemyType);
+                    }
                 }
             }
         }
