@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Background extends GameObject {
-    private final int moveSpeed = 100;
+    private final int moveSpeed = 150;
     private Texture bg2;
     private int yBg2 = 1500;
 

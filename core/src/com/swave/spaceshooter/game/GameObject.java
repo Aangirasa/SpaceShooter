@@ -17,7 +17,7 @@ public abstract class GameObject {
 
     public abstract void update(Batch batch);
 
-    void resetTransform(Vector2 position){
+    void resetTransform(Vector2 position) {
         this.transform = position;
     }
 }

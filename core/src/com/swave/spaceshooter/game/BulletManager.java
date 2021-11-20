@@ -9,12 +9,15 @@ import java.util.List;
 
 public class BulletManager {
     private final List<Bullets> pool = new ArrayList<>();
-    int MAX = 70;
+    public Vector2 direction;
 
-    public BulletManager() {
+    public BulletManager(Vector2 direction, int MAX) {
+        this.direction = direction;
         Bullets.updateTexture(new Texture("shotoval.png"));
         for (int i = 0; i < MAX; i++) {
-            pool.add(new Bullets(new Vector2(0f, 1505f)));
+            Bullets b = new Bullets(new Vector2(0f, 1505f));
+            b.direction = direction;
+            pool.add(b);
         }
     }
 
@@ -30,5 +33,9 @@ public class BulletManager {
         for (Bullets b : pool) {
             b.update(batch);
         }
+    }
+
+    public List<Bullets> getBulletsPool() {
+        return pool;
     }
 }
