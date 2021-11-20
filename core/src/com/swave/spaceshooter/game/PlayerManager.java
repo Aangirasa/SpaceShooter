@@ -4,20 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends GameObject {
+import java.util.List;
+
+public class PlayerManager extends GameObject {
     private static final Texture shipLeft = new Texture("ship0.png");
     private static final Texture shipRight = new Texture("ship4.png");
-    private final BulletManager bulletManager = new BulletManager(new Vector2(0,1),70);
-    public int health = 100;
+    public static int health = 100;
+    public static Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 25f);
+    private static PlayerManager INSTANCE = null;
+    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70);
     public int MOVEMENT_SPEED = 120;
     public float fireRate = 0.1f;
     public float coolDown = fireRate;
 
+    private PlayerManager() {
+        super(new Vector2(250 - 20, 150), new Texture("ship1.png"));
+    }
 
-    public Player(Vector2 transform, Texture sprite) {
-        super(transform, sprite);
+    public static PlayerManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PlayerManager();
+        }
+        return INSTANCE;
     }
 
     @Override
@@ -31,6 +42,8 @@ public class Player extends GameObject {
         transform.y -= (inputs.y * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
         handleBulletFires();
         bulletManager.update(batch);
+        boundingBox.setPosition(transform.x, transform.y);
+        detectCollision(EnemyManager.getInstance().bulletManager.getBulletsPool());
         batch.draw(currentFrame, transform.x, transform.y);
     }
 
@@ -62,4 +75,13 @@ public class Player extends GameObject {
         }
         return new Vector2(x, y);
     }
+
+    public void detectCollision(List<Bullets> bulletsList) {
+        bulletsList.forEach(bullets -> {
+            if (boundingBox.overlaps(bullets.boundingBox)) {
+                health--;
+            }
+        });
+    }
+
 }

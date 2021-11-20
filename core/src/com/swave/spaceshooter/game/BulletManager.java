@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BulletManager {
-    public Vector2 direction;
     private final List<Bullets> pool = new ArrayList<>();
+    public Vector2 direction;
 
-    public BulletManager(Vector2 direction,int MAX) {
+    public BulletManager(Vector2 direction, int MAX) {
         this.direction = direction;
         Bullets.updateTexture(new Texture("shotoval.png"));
         for (int i = 0; i < MAX; i++) {
@@ -33,5 +33,9 @@ public class BulletManager {
         for (Bullets b : pool) {
             b.update(batch);
         }
+    }
+
+    public List<Bullets> getBulletsPool() {
+        return pool;
     }
 }
