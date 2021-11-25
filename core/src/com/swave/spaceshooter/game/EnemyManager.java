@@ -47,8 +47,6 @@ public class EnemyManager {
         detectCollisions(PlayerManager.getInstance().bulletManager.getBulletsPool());
         enemies.forEach(enemy -> {
             enemy.update(batch);
-            Explosion explosion = new Explosion(enemy.transform);
-            explosion.update(batch);
         });
     }
 

@@ -1,6 +1,7 @@
 package com.swave.spaceshooter;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.swave.spaceshooter.events.*;
@@ -25,8 +26,8 @@ public class SpaceShooter extends ApplicationAdapter {
         explosionPool = ExplosionPool.getInstance();
         ScoreListener scoreListener = new ScoreListener();
         ExplosionListener explosionListener = new ExplosionListener();
-        eventManager.subscribe(EventNames.EXPLODE,explosionListener);
-        eventManager.subscribe(EventNames.ADD_POINTS,scoreListener);
+        eventManager.subscribe(EventNames.EXPLODE, explosionListener);
+        eventManager.subscribe(EventNames.ADD_POINTS, scoreListener);
     }
 
 
@@ -38,6 +39,7 @@ public class SpaceShooter extends ApplicationAdapter {
         playerManager.update(batch);
         enemyManager.update(batch);
         explosionPool.update(batch);
+        System.out.println(Gdx.graphics.getFramesPerSecond());
         batch.end();
     }
 
