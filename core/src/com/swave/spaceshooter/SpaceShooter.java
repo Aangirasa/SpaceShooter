@@ -1,19 +1,20 @@
 package com.swave.spaceshooter;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.swave.spaceshooter.game.Background;
-import com.swave.spaceshooter.game.EnemyManager;
-import com.swave.spaceshooter.game.GameObject;
-import com.swave.spaceshooter.game.PlayerManager;
+import com.swave.spaceshooter.events.*;
+import com.swave.spaceshooter.game.*;
 
 public class SpaceShooter extends ApplicationAdapter {
 
     EnemyManager enemyManager;
     private SpriteBatch batch;
     private GameObject background;
-    private GameObject playerManager;
+    private PlayerManager playerManager;
+    private EventManager eventManager;
+    private ExplosionPool explosionPool;
 
     @Override
     public void create() {
@@ -21,6 +22,12 @@ public class SpaceShooter extends ApplicationAdapter {
         background = new Background();
         enemyManager = EnemyManager.getInstance();
         playerManager = PlayerManager.getInstance();
+        eventManager = EventManagerImpl.getInstance();
+        explosionPool = ExplosionPool.getInstance();
+        ScoreListener scoreListener = new ScoreListener();
+        ExplosionListener explosionListener = new ExplosionListener();
+        eventManager.subscribe(EventNames.EXPLODE, explosionListener);
+        eventManager.subscribe(EventNames.ADD_POINTS, scoreListener);
     }
 
 
@@ -31,6 +38,8 @@ public class SpaceShooter extends ApplicationAdapter {
         background.update(batch);
         playerManager.update(batch);
         enemyManager.update(batch);
+        explosionPool.update(batch);
+        System.out.println(Gdx.graphics.getFramesPerSecond());
         batch.end();
     }
 

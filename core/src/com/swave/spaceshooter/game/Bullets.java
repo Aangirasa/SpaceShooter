@@ -7,15 +7,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bullets {
-    private static final int SPEED = 150;
+    private static final int SPEED = 500;
     private static Texture texture;
     public boolean isActive = true;
+    public float strength;
     public Vector2 transform;
     public Vector2 direction;
-    public Rectangle boundingBox = new Rectangle(0f, 0f, 17f, 17f);
+    public Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 15f);
 
-    public Bullets(Vector2 transform) {
+    public Bullets(Vector2 transform,int strength) {
         this.transform = transform;
+        this.strength =strength;
     }
 
     public static void updateTexture(Texture newTexture) {
@@ -30,7 +32,6 @@ public class Bullets {
             isActive = false;
         }
         if (isActive) {
-            System.out.println(transform.toString());
             transform.y += SPEED * Gdx.graphics.getDeltaTime() * direction.y;
             boundingBox.setPosition(transform.x, transform.y);
             batch.draw(texture, transform.x, transform.y);

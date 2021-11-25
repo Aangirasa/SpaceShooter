@@ -9,14 +9,17 @@ import com.badlogic.gdx.math.Vector2;
 public class Enemy {
     static Texture texture = new Texture("parafighter.png");
     static int MOVEMENT_SPEED = 150;
-    public int health;
-    Vector2 transform;
-    Vector2 target;
-    float remainingTime = 10f;
-    float fireRate = 0.3f;
-    float coolDown = fireRate;
-    BulletManager bulletManager;
     private final Rectangle boundingBox = new Rectangle(0f, 0f, 32f, 33f);
+    public int health = 100;
+    public Vector2 transform;
+    //private float remainingTime = 10f;
+    public boolean isActive = true;
+    public EnemyType enemyType = EnemyType.BASIC;
+    Vector2 defaultBulletVector = new Vector2(0, 0);
+    private final Vector2 target;
+    private final float fireRate = 0.6f;
+    private float coolDown = fireRate;
+    private final BulletManager bulletManager;
 
     public Enemy(BulletManager bulletManager, Vector2 transform, Vector2 target) {
         this.transform = transform;
@@ -25,12 +28,15 @@ public class Enemy {
     }
 
     public void update(Batch batch) {
-        remainingTime -= Gdx.graphics.getDeltaTime();
+        if (!isActive) {
+            return;
+        }
+        //remainingTime -= Gdx.graphics.getDeltaTime();
         coolDown -= Gdx.graphics.getDeltaTime();
-        transform.x = (float) Math.sin(transform.y / 11) * 125 + 250;
-        transform.y -= (float) Math.sin(transform.x);
+        //transform.x = (float) Math.sin(transform.y / 11) * 125 + 250;
+        //transform.y -= (float) Math.sin(transform.x);
         if (coolDown < 0) {
-            bulletManager.addResources(new Vector2(transform.x + 5, transform.y + 5));
+            bulletManager.addResources(defaultBulletVector.set(transform.x + 5, transform.y + 5));
             coolDown = fireRate;
         }
        /* if(remainingTime<0){
@@ -38,7 +44,7 @@ public class Enemy {
             batch.draw(texture,transform.x,transform.y);
             return;
         }*/
-        transform.y -= Gdx.graphics.getDeltaTime() * MOVEMENT_SPEED * 0.5;
+        transform.y -= Gdx.graphics.getDeltaTime() * MOVEMENT_SPEED * 0.3;
 
         if ((int) transform.x != (int) target.x) {
             transform.x = transform.x > target.x ?

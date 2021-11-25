@@ -15,10 +15,12 @@ public class PlayerManager extends GameObject {
     public static int health = 100;
     public static Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 25f);
     private static PlayerManager INSTANCE = null;
-    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70);
+    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70, 5);
     public int MOVEMENT_SPEED = 120;
-    public float fireRate = 0.1f;
+    public float fireRate = 0.25f;
     public float coolDown = fireRate;
+    private final Vector2 bulletVectors = new Vector2(0, 0);
+    private final Vector2 inputVector = new Vector2(0, 0);
 
     private PlayerManager() {
         super(new Vector2(250 - 20, 150), new Texture("ship1.png"));
@@ -33,13 +35,13 @@ public class PlayerManager extends GameObject {
 
     @Override
     public void update(Batch batch) {
-        Vector2 inputs = handleMovementInputs();
+        handleMovementInputs();
         Texture currentFrame = this.texture;
-        if (inputs.x != 0) {
-            currentFrame = inputs.x < 0 ? shipLeft : shipRight;
-            transform.x -= (inputs.x * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
+        if (inputVector.x != 0) {
+            currentFrame = inputVector.x < 0 ? shipLeft : shipRight;
+            transform.x -= (inputVector.x * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
         }
-        transform.y -= (inputs.y * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
+        transform.y -= (inputVector.y * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
         handleBulletFires();
         bulletManager.update(batch);
         boundingBox.setPosition(transform.x, transform.y);
@@ -51,35 +53,34 @@ public class PlayerManager extends GameObject {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             coolDown -= Gdx.graphics.getDeltaTime();
             if (coolDown < 0) {
-                bulletManager.addResources(new Vector2(transform.x - 5, transform.y + 10));
-                bulletManager.addResources(new Vector2(transform.x + 13, transform.y + 10));
+                bulletManager.addResources(bulletVectors.set(transform.x - 5, transform.y + 10));
+                bulletManager.addResources(bulletVectors.set(transform.x + 13, transform.y + 10));
                 coolDown = fireRate;
             }
         }
     }
 
-    private Vector2 handleMovementInputs() {
-        int x = 0;
-        int y = 0;
+    private void handleMovementInputs() {
+        inputVector.set(0, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {
-            x = 2;
+            inputVector.x = 2;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) && !Gdx.input.isKeyPressed(Input.Keys.A)) {
-            x = -2;
+            inputVector.x = -2;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W) && !Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y = -2;
+            inputVector.y = -2;
         }
         if (!Gdx.input.isKeyPressed(Input.Keys.W) && Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y = 2;
+            inputVector.y = 2;
         }
-        return new Vector2(x, y);
     }
 
     public void detectCollision(List<Bullets> bulletsList) {
         bulletsList.forEach(bullets -> {
-            if (boundingBox.overlaps(bullets.boundingBox)) {
+            if (bullets.isActive && boundingBox.overlaps(bullets.boundingBox)) {
                 health--;
+                bullets.isActive = false;
             }
         });
     }
