@@ -3,15 +3,15 @@ package com.swave.spaceshooter.events;
 import java.util.*;
 
 public class EventManagerImpl implements EventManager {
-    private Map<String, List<EventListener>> listenersContext;
     private static EventManager INSTANCE = null;
+    private final Map<String, List<EventListener>> listenersContext;
 
     public EventManagerImpl() {
         listenersContext = new HashMap<>();
     }
 
-    public static EventManager getInstance(){
-        if(INSTANCE == null){
+    public static EventManager getInstance() {
+        if (INSTANCE == null) {
             INSTANCE = new EventManagerImpl();
         }
         return INSTANCE;
@@ -19,9 +19,9 @@ public class EventManagerImpl implements EventManager {
 
     @Override
     public void subscribe(String type, EventListener eventListener) {
-        if(listenersContext.containsKey(type)) {
+        if (listenersContext.containsKey(type)) {
             listenersContext.get(type).add(eventListener);
-        }else {
+        } else {
             listenersContext.put(type, Arrays.asList(eventListener));
         }
     }

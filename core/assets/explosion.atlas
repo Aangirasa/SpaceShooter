@@ -1,0 +1,83 @@
+
+explosion.png
+size: 2048, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+boom01
+  rotate: false
+  xy: 1262, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom02
+  rotate: false
+  xy: 758, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom03
+  rotate: false
+  xy: 254, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom04
+  rotate: false
+  xy: 1010, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom05
+  rotate: false
+  xy: 506, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom06
+  rotate: false
+  xy: 2, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom07
+  rotate: false
+  xy: 758, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom08
+  rotate: false
+  xy: 254, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom09
+  rotate: false
+  xy: 1010, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom10
+  rotate: false
+  xy: 506, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+boom11
+  rotate: false
+  xy: 2, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
