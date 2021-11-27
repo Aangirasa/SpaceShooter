@@ -1,5 +1,6 @@
 package com.swave.spaceshooter.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.swave.spaceshooter.events.EventManager;
@@ -16,11 +17,19 @@ public class EnemyManager {
     private static EnemyManager INSTANCE = null;
     private final List<Enemy> enemies;
     private final EventManager eventManager = EventManagerImpl.getInstance();
-    public BulletManager bulletManager;
+    public ObjectPool<Bullets> bulletPool;
+    private Vector2 offScreenPosition = new Vector2(0,1500);
+    private Vector2 enemyDirection = new Vector2(0, -1);
+
 
     private EnemyManager() {
         this.enemies = new ArrayList<>();
-        this.bulletManager = new BulletManager(new Vector2(0, -1), 120, 1);
+        this.bulletPool = new ObjectPool<>(120,()->{
+                    Bullets bullets = new Bullets(offScreenPosition,new Texture("shotoval.png"));
+                    bullets.direction = enemyDirection;
+                    bullets.isActive = false;
+                    return bullets;
+        });
         //bulletManager.direction = new Vector2(0, -1);
         spawnEnemies();
     }
@@ -33,18 +42,18 @@ public class EnemyManager {
     }
 
     private void spawnEnemies() {
-        enemies.add(new Enemy(bulletManager, new Vector2(232, 750 + 300), new Vector2(232, 650)));
-        enemies.add(new Enemy(bulletManager, new Vector2(132, 800 + 300), new Vector2(132, 700)));
-        enemies.add(new Enemy(bulletManager, new Vector2(332, 800 + 300), new Vector2(332, 700)));
-        enemies.add(new Enemy(bulletManager, new Vector2(430, 850 + 300), new Vector2(430, 750)));
-        enemies.add(new Enemy(bulletManager, new Vector2(30, 850 + 300), new Vector2(30, 750)));
-        enemies.add(new Enemy(bulletManager, new Vector2(430 + 100, 950), new Vector2(365, 800)));
-        enemies.add(new Enemy(bulletManager, new Vector2(30 - 100, 950), new Vector2(90, 800)));
+        enemies.add(new Enemy(bulletPool, new Vector2(232, 750 + 300), new Vector2(232, 650)));
+        enemies.add(new Enemy(bulletPool, new Vector2(132, 800 + 300), new Vector2(132, 700)));
+        enemies.add(new Enemy(bulletPool, new Vector2(332, 800 + 300), new Vector2(332, 700)));
+        enemies.add(new Enemy(bulletPool, new Vector2(430, 850 + 300), new Vector2(430, 750)));
+        enemies.add(new Enemy(bulletPool, new Vector2(30, 850 + 300), new Vector2(30, 750)));
+        enemies.add(new Enemy(bulletPool, new Vector2(430 + 100, 950), new Vector2(365, 800)));
+        enemies.add(new Enemy(bulletPool, new Vector2(30 - 100, 950), new Vector2(90, 800)));
     }
 
     public void update(Batch batch) {
-        bulletManager.update(batch);
-        detectCollisions(PlayerManager.getInstance().bulletManager.getBulletsPool());
+        bulletPool.update(batch);
+        detectCollisions(PlayerManager.getInstance().bulletPool.getGameObjects());
         enemies.forEach(enemy -> {
             enemy.update(batch);
         });

@@ -19,12 +19,12 @@ public class Enemy {
     private final Vector2 target;
     private final float fireRate = 0.6f;
     private float coolDown = fireRate;
-    private final BulletManager bulletManager;
+    private final ObjectPool<Bullets> bulletPool;
 
-    public Enemy(BulletManager bulletManager, Vector2 transform, Vector2 target) {
+    public Enemy(ObjectPool<Bullets> bulletPool, Vector2 transform, Vector2 target) {
         this.transform = transform;
         this.target = target;
-        this.bulletManager = bulletManager;
+        this.bulletPool = bulletPool;
     }
 
     public void update(Batch batch) {
@@ -36,7 +36,7 @@ public class Enemy {
         //transform.x = (float) Math.sin(transform.y / 11) * 125 + 250;
         //transform.y -= (float) Math.sin(transform.x);
         if (coolDown < 0) {
-            bulletManager.addResources(defaultBulletVector.set(transform.x + 5, transform.y + 5));
+            bulletPool.getResource(defaultBulletVector.set(transform.x + 5, transform.y + 5));
             coolDown = fireRate;
         }
        /* if(remainingTime<0){

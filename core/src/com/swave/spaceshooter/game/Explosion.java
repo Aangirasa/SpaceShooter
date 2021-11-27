@@ -7,14 +7,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Explosion {
+public class Explosion extends GameObject{
     private final static TextureAtlas textureAtlas = new TextureAtlas("explosion.atlas");
     private final static Animation animation = new Animation(1 / 11f, textureAtlas.getRegions());
-    public boolean isActive = false;
-    private final Vector2 transform;
     private float elapsedTime = 0f;
 
-    Explosion(Vector2 transform) {
+    public Explosion(Vector2 transform) {
+        super(new Vector2(transform),null);
         this.transform = transform;
     }
 

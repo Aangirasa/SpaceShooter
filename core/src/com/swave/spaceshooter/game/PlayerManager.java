@@ -15,15 +15,24 @@ public class PlayerManager extends GameObject {
     public static int health = 100;
     public static Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 25f);
     private static PlayerManager INSTANCE = null;
-    public final BulletManager bulletManager = new BulletManager(new Vector2(0, 1), 70, 5);
+    public final ObjectPool<Bullets> bulletPool;
     public int MOVEMENT_SPEED = 120;
     public float fireRate = 0.25f;
     public float coolDown = fireRate;
     private final Vector2 bulletVectors = new Vector2(0, 0);
     private final Vector2 inputVector = new Vector2(0, 0);
+    private Vector2 playerDirection = new Vector2(0, 1);
+    private Vector2 offScreenPosition = new Vector2(0,1500);
+
 
     private PlayerManager() {
         super(new Vector2(250 - 20, 150), new Texture("ship1.png"));
+        bulletPool = new ObjectPool<>(70,()->{
+            Bullets bullets = new Bullets(offScreenPosition,new Texture("shotoval.png"));
+            bullets.direction = playerDirection;
+            bullets.isActive = false;
+            return bullets;
+        });
     }
 
     public static PlayerManager getInstance() {
@@ -43,9 +52,9 @@ public class PlayerManager extends GameObject {
         }
         transform.y -= (inputVector.y * MOVEMENT_SPEED * Gdx.graphics.getDeltaTime());
         handleBulletFires();
-        bulletManager.update(batch);
+        bulletPool.update(batch);
         boundingBox.setPosition(transform.x, transform.y);
-        detectCollision(EnemyManager.getInstance().bulletManager.getBulletsPool());
+        detectCollision(EnemyManager.getInstance().bulletPool.getGameObjects());
         batch.draw(currentFrame, transform.x, transform.y);
     }
 
@@ -53,8 +62,8 @@ public class PlayerManager extends GameObject {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             coolDown -= Gdx.graphics.getDeltaTime();
             if (coolDown < 0) {
-                bulletManager.addResources(bulletVectors.set(transform.x - 5, transform.y + 10));
-                bulletManager.addResources(bulletVectors.set(transform.x + 13, transform.y + 10));
+                bulletPool.getResource(bulletVectors.set(transform.x - 5, transform.y + 10));
+                bulletPool.getResource(bulletVectors.set(transform.x + 13, transform.y + 10));
                 coolDown = fireRate;
             }
         }

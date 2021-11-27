@@ -6,24 +6,19 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Bullets {
+import javax.xml.bind.ValidationEvent;
+
+public class Bullets extends GameObject {
     private static final int SPEED = 500;
-    private static Texture texture;
-    public boolean isActive = true;
-    public float strength;
-    public Vector2 transform;
+    public float strength=5;
     public Vector2 direction;
     public Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 15f);
 
-    public Bullets(Vector2 transform,int strength) {
-        this.transform = transform;
-        this.strength =strength;
+    public Bullets(Vector2 transform, Texture sprite) {
+        super(new Vector2(transform), sprite);
     }
 
-    public static void updateTexture(Texture newTexture) {
-        texture = newTexture;
-    }
-
+    @Override
     public void update(Batch batch) {
         if (isActive && direction.y == -1 && transform.y < 0) {
             isActive = false;

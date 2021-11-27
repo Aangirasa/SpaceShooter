@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class GameObject {
     public Vector2 transform;
     public Texture texture;
+    public boolean isActive = true;
 
 
     public GameObject(Vector2 transform, Texture sprite) {
