@@ -20,7 +20,7 @@ public class EnemyManager {
 
     private EnemyManager() {
         this.enemies = new ArrayList<>();
-        this.bulletManager = new BulletManager(new Vector2(0, -1), 120, 1);
+        this.bulletManager = new BulletManager(new Vector2(0, -1f), 120, 1);
         //bulletManager.direction = new Vector2(0, -1);
         spawnEnemies();
     }
@@ -54,17 +54,25 @@ public class EnemyManager {
         for (Bullets bullet : playerBullets) {
             for (Enemy enemy : enemies) {
                 if (enemy.isActive) {
-                    if (bullet.isActive && enemy.isCollision(bullet.boundingBox)) {
-                        enemy.health -= 10;
-                        bullet.isActive = false;
-                    }
-                    if (enemy.health < 0) {
-                        enemy.isActive = false;
-                        eventManager.notify(ADD_POINTS, enemy.enemyType);
-                        eventManager.notify(EXPLODE, enemy.transform);
-                    }
+                    handleEnemyHits(bullet, enemy);
+                    handleEnemyDeath(enemy);
                 }
             }
+        }
+    }
+
+    private void handleEnemyHits(Bullets bullet, Enemy enemy) {
+        if (bullet.isActive && enemy.isCollision(bullet.boundingBox)) {
+            enemy.health -= 10;
+            bullet.isActive = false;
+        }
+    }
+
+    private void handleEnemyDeath(Enemy enemy) {
+        if (enemy.health < 0) {
+            enemy.isActive = false;
+            eventManager.notify(ADD_POINTS, enemy.enemyType);
+            eventManager.notify(EXPLODE, enemy.transform);
         }
     }
 

@@ -23,6 +23,10 @@ public class Explosion {
             return;
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, false), transform.x, transform.y, 48f, 48f);
+        deactivateIfAnimationFinished();
+    }
+
+    private void deactivateIfAnimationFinished() {
         if (animation.isAnimationFinished(elapsedTime)) {
             isActive = false;
             elapsedTime = 0f;

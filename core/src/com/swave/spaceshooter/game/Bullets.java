@@ -15,9 +15,9 @@ public class Bullets {
     public Vector2 direction;
     public Rectangle boundingBox = new Rectangle(0f, 0f, 15f, 15f);
 
-    public Bullets(Vector2 transform,int strength) {
+    public Bullets(Vector2 transform, int strength) {
         this.transform = transform;
-        this.strength =strength;
+        this.strength = strength;
     }
 
     public static void updateTexture(Texture newTexture) {
@@ -25,16 +25,25 @@ public class Bullets {
     }
 
     public void update(Batch batch) {
-        if (isActive && direction.y == -1 && transform.y < 0) {
+        if (!isActive) {
+            return;
+        }
+        drawBullets(batch);
+        deactivateIfOutOfBounds();
+    }
+
+    private void drawBullets(Batch batch) {
+        transform.y += SPEED * Gdx.graphics.getDeltaTime() * direction.y;
+        boundingBox.setPosition(transform.x, transform.y);
+        batch.draw(texture, transform.x, transform.y);
+    }
+
+    private void deactivateIfOutOfBounds() {
+        if (direction.y == -1 && transform.y < 0) {
             isActive = false;
         }
-        if (isActive && direction.y == 1 && transform.y > 1000) {
+        if (direction.y == 1 && transform.y > 1000) {
             isActive = false;
-        }
-        if (isActive) {
-            transform.y += SPEED * Gdx.graphics.getDeltaTime() * direction.y;
-            boundingBox.setPosition(transform.x, transform.y);
-            batch.draw(texture, transform.x, transform.y);
         }
     }
 }

@@ -35,12 +35,12 @@ public class ExplosionPool {
     }
 
     public void setExplosionsAt(Vector2 position) {
-        Explosion expl = explosions.stream()
-                .filter(explosion -> !explosion.isActive)
-                .findFirst().orElse(null);
-        if (expl != null) {
-            expl.isActive = true;
-            expl.setTransform(position);
+        for (Explosion explosion : explosions) {
+            if (!explosion.isActive) {
+                explosion.isActive = true;
+                explosion.setTransform(position);
+                break;
+            }
         }
     }
 }

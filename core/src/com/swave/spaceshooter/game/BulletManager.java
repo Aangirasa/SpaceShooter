@@ -13,7 +13,7 @@ public class BulletManager {
 
     public BulletManager(Vector2 direction, int MAX, int strength) {
         this.direction = direction;
-        Bullets.updateTexture(new Texture("shotoval.png"));
+        Bullets.updateTexture(new Texture("ship0.png"));
         for (int i = 0; i < MAX; i++) {
             Bullets b = new Bullets(new Vector2(0f, 1505f), strength);
             b.direction = direction;
@@ -22,11 +22,14 @@ public class BulletManager {
     }
 
     public void addResources(Vector2 position) {
-        Bullets bullets = pool.stream().filter(b -> !b.isActive).findFirst().orElse(null);
-        if (bullets != null) {
-            bullets.isActive = true;
-            bullets.transform.set(position.x, position.y);
+        for (Bullets bullets : pool) {
+            if (!bullets.isActive) {
+                bullets.isActive = true;
+                bullets.transform.set(position.x, position.y);
+                break;
+            }
         }
+
     }
 
     public void update(Batch batch) {
